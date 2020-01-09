@@ -1,7 +1,7 @@
 ﻿Imports Newtonsoft.Json
-Imports System.Linq
 
 Public Class Form1
+
     Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
         Dim quest = New Quest()
 
@@ -9,21 +9,14 @@ Public Class Form1
         quest.Icon = "trash_can"
         quest.displayName = "Taking out the Trash"
 
-        Dim varDisplay = New Display()
-        varDisplay.Type = "item"
-        varDisplay.Text = "Craft a Trash Can"
-        quest.display.displayItems.Add(varDisplay)
+        Dim varDisplay = New Display With {.Type = "text", .Text = "Craft a Trash Can"}
+        quest.displayItems.Add(varDisplay)
 
-        Dim varCondition = New Condition()
-        varCondition.Type = "item"
-        varCondition.Item = "trash_can"
-        quest.conditions.conditionItems.Add(varCondition)
+        Dim varCondition = New Condition With {.Type = "item", .Item = "trash_can", .Amount = 1}
+        quest.conditionItems.Add(varCondition)
 
-        Dim varReward = New Reward()
-        varReward.Type = "item"
-        varReward.Item = "cobblestone"
-        varReward.Amount = 1
-        quest.rewards.rewardItems.Add(varReward)
+        Dim varReward = New Reward With {.Type = "item", .Item = "cobblestone", .Amount = 1}
+        quest.rewardItems.Add(varReward)
 
         Dim rawJSON = JsonConvert.SerializeObject(quest)
 
@@ -32,11 +25,12 @@ Public Class Form1
         output.Write(rawJSON)
         output.Close()
 
-
     End Sub
+
 End Class
 
 Class Quest
+
     <JsonProperty(PropertyName:="name")>
     Public Property Title As String
 
@@ -47,29 +41,28 @@ Class Quest
     Public Property displayName As String
 
     <JsonProperty(PropertyName:="display")>
-    Public Property display As DisplayItems = New DisplayItems
+    Public Property displayItems As List(Of Display) = New List(Of Display)
 
     <JsonProperty(PropertyName:="conditions")>
-    Public Property conditions As ConditionItems = New ConditionItems
+    Public Property conditionItems As List(Of Condition) = New List(Of Condition)
 
     <JsonProperty(PropertyName:="rewards")>
-    Public Property rewards As RewardItems = New RewardItems
+    Public Property rewardItems As List(Of Reward) = New List(Of Reward)
+
 End Class
 
 Public Class Display
+
     <JsonProperty(PropertyName:="type")>
     Public Property Type As String
 
     <JsonProperty(PropertyName:="text")>
     Public Property Text As String
-End Class
 
-Public Class DisplayItems
-    <JsonProperty(PropertyName:="display")>
-    Public Property displayItems As List(Of Display) = New List(Of Display)
 End Class
 
 Public Class Condition
+
     <JsonProperty(PropertyName:="type")>
     Public Property Type As String
 
@@ -78,14 +71,11 @@ Public Class Condition
 
     <JsonProperty(PropertyName:="amount")>
     Public Property Amount As Integer
-End Class
 
-Public Class ConditionItems
-    <JsonProperty(PropertyName:="conditions")>
-    Public Property conditionItems As List(Of Condition) = New List(Of Condition)
 End Class
 
 Public Class Reward
+
     <JsonProperty(PropertyName:="type")>
     Public Property Type As String
 
@@ -94,9 +84,5 @@ Public Class Reward
 
     <JsonProperty(PropertyName:="amount")>
     Public Property Amount As Integer
-End Class
 
-Public Class RewardItems
-    <JsonProperty(PropertyName:="rewards")>
-    Public Property rewardItems As List(Of Reward) = New List(Of Reward)
 End Class
